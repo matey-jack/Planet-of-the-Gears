@@ -1,0 +1,5 @@
+1. entering a non-number causes an exception
+solution: only digits should be typeable at all
+(workaround: filter non-digits when Enter is pressed)
+
+2. Shaft.equals(Shaft) gibt FALSE, obwohl die beiden Attribute der Objekte gleich sind!

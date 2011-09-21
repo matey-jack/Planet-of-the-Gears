@@ -1,0 +1,16 @@
+TODO: all_shafts: this is referenced often, but not changed often. it should be an attribute instead of an on-the-fly property.
+
+document when indexes are passed counting from 0 and when from 1.
+(UI: from 1; table rows/colums: depends if header counts; internal storage: from 0)
+
+NOTES
+
+in order to sort the list of power paths, we need to store at least the output ratio somewhere.
+
+let's make the table of speeds public and have the backend update it upon every change that comes from the frontend. we have to funnel all those changes through an interface.
+
+the transmission path needs to reference the individual gears/shafts which it currently does via GearHandle (rename to Shaft??).
+How do we get from the Shaft to the measures of the associated gears? Give GearScheme a static member containing an instance and another static member which returns the PlanetElement i from that instance.
+
+for drag-drop we need a different data model for the transmission paths: each shaft needs to know whether it's input, output, or ground. 
+the Transferable object needs to store which was the origin shaft of the drag and the shaft then knows its binding.

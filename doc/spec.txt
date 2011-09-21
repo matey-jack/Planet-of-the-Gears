@@ -1,0 +1,69 @@
+      
+
+gear ratio calculator and gear scheme visualizer for planetary gears
+=================================================================
+
+part one: calculating different transmission paths for one planetary gear scheme
+part two: calculating ratios for serially combined gears (with the possibility of excluding some combinations which are mechanically infisible or don't result in useful ratios)
+
+part one: gear schemes visualization and calculation
+==================================================
+
+Terminology: I follow the literature (especially patent texts) by using the word “gear” for a cog wheel and using the word “speed” for the power train ratios. That is, I say “first speed”, “second speed”, and so on, when non-technical language would say “first gear”, “second gear”, and so on.
+
+For now, all gear schemes are assumed to have just one carrier with a plurality of planet shafts (whose number is irrelevant for our calculations) with at least one planet gear (element) on each shaft. (Having several carriers can be modeled by modeling each separately in part one of the tool and then connecting them in part two of the tool.)
+The planet gears are numbered from 1 upwards and each can have a sun gear and a ring gear in mesh with it. (For sake of presentation, the side to which the shaft of each ring gear goes can be chosen.) The sun and ring gears are (if present) numbered just as their corresponding planet gears.
+
+OQ: should the planet elements be sorted by size or be rearrangeable by drag and drop?
+
+three part screen:
+1. visual of the gears
+2. table of gear (cog wheel) sizes
+3. table of transmission paths
+
+1 visual |
+         |   3 transmission paths with 
+-----------|   speeds of all shafts
+2        |
+measures|
+
+for 1. see mock-up drawings
+The central axis is shown on the bottom of the drawing with the sun gears on it. One of the planet shafts is shown above in a fixed distance with the planet gears on it and ring gears on top of that.
+
+for 2:
+We normalize all measures such that the distance between planet shaft and central axis is just 1/2. The size of the sun and planet gears will then be between 0 and 1, where one of each which form a pair in mesh always add up to size 1. In formulas that is P_i + S_i = 1. The size of the ring gear will be between 1 and 2 with R_i = 1 + P_i.
+The table has one line for each planet element i and one column each for the measures S_i, P_i, and R_i. Number of rows and columns is thus fixed by the number of planet elements present. The measures of each planet set (row in the table) can be adjusted by adjusting one of the numbers in the table or by dragging the boundary between the cog wheels. Other values and the diagram are automatically adapted. The leading digit ”0.” and “1.” is fixed in the table and cannot be changed. This way, everything entered in the table will be automatically valid and can lead to instant redrawing and recalculation.
+ring and sun gear of each planet element are optional and can be switched on and off by clicking in the respective cell (but outside the text box, preferably a space with an icon or handle). the respective gear and shaft will then disappear from the diagram 1 and the list 3 of transmission paths.
+
+for 3:
+transmission paths have to be added manually by stating for each path:
+ – which is the input shaft, which is the fixed shaft, and which is the output shaft.
+after that, the speed of input is assumed to be +1, the fixed one is 0, and all others are calculated.
+The speeds (with sign) of free gears and the output gears are calculated in the same way, but the output gear is marked grafically and its speed is used to sort the rows of the table from smallest output ratio to biggest.
+the last column of the table gives the ratio-difference of adjacent speeds (that is, the gear step ratio) and the overal development ratio (fastest divided by slowest gear).
+
+Seeing the speeds of all the free wheeling gears is useful for the engineer to determine where one-way clutches can be used to connect gears to shafts, instead of the easier jamming and harder to actuate two-clutches.
+OQ: does it make sense to use a different normalization, for ex, the carrier always having speed +1?
+OQ: manipulation of numbers or qualitative values (input, output, fixed gear) will change the sorting of the table. is that too confusing? I think no, because having it always sorted gives us a useful normalized view!
+
+The assignment of input, output, and fixed gear can be done by dragging the cells with value +1, the grafical mark, and value 0 respectively to another column. (This way, we need no buttons or menus which is very cool.)
+
+Control buttons:
+Load, Save, Save as, Clear all (to start a new scheme)
+A gear scheme has no name besides its file name.
+optional: The current file name is shown in an editable text box where it can be edited to rename the gear scheme.
+
+The number of planet elements is edited by adding and removing planet elements as follows: 
+– add a new one by dragging it from the grafically shown box of elements unto the gear scheme. 
+– remove one by dragging it to the garbabe box (hold it on the planet or sun wheel, not on the dividing lines, since that action changes the size)
+– restore a removed one by dragging it back from the garbage box
+
+Alternatively we can edit via the measures table (part two):
+ – “add new” button at bottom of table
+ – “delete” button behind every row
+ – “undelete” button at bottom of table (undelete is done in reverse order of deletion. to just undelete one row, but not those that were deleted later on, undelete all of them and then delete the undesired ones again.)
+The pile of deleted rows is saved and loaded from files, it is unlimited and never gets lost. 
+There is some feature interaction between the undeleting of planet elements and transmission paths, so I will not implement this design until I have revised it. Maybe a general Undo button will be better. 
+The number of transmission paths is edited in the same way.
+There is no undo button, but increasing the number of planet elements will restore previously deleted planet elements
+

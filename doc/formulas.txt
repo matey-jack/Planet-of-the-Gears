@@ -1,0 +1,45 @@
+Our gear scheme 
+
+The set of shafts is all the sun gears, all the ring gears and the carrier. This is at most 2×n+1 shafts for an epicyclic gear with n planet elements.
+
+In a transmission path, there is exactly one driver (input), one fixed, and one driven (output) shaft. All three of them must be different. All the remaining shafts are free-wheeling. Calculating the speed works the same for free-wheeling shafts and the output shaft, however, it is the speed of the output shaft which determines the ratio of the transmission path and thus its position in the sequence of speeds.
+
+Calculation:
+ 1. assuming that the carrier is fixed, use stationary relations to calc the speed of the fixed and output gear each in relation to the input gear which is assumed to be 1. 
+ no wait: if the carrier is the input, then it can't be assumed to be 1 and fixed (that is, 0) at the same time :-S
+ can those ratios be given in numeric fashion at all? or is it rather formulas that have to be manipulated algebraically?
+ 
+example layout:
+2 planet elements
+input ring1, output ring2, fixed sun1
+
+d^s1(r2, r1) = r2^s1 / r1^s1 = (r2^c - s1^c) / (r1^c - s1^c)
+
+so it seems, what we really are doing is to express everything in terms of the fixed gear!
+
+stationary ratios:
+p×P1 = r1^c×R1
+p×P2 = r2^c×R2
+p×P1 = s1^c×S1
+
+r1^c×R1 = p×P1 = s1^c×S1 --> r1^c = s1^c×S1/R1
+r2^c×R2×P1 = p×P1×P2 = s1^c×S1×P2 --> r2^c = s1^c×S1×P2/R2/P1
+
+putting it together:
+d^s1(r2, r1) = (s1^c×S1×P2/R2/P1 - s1^c) / (s1^c×S1/R1 - s1^c)
+	= (S1×P2/R2/P1 - 1) / (S1/R1 - 1)
+
+General case:
+input i, output o, fixed f 
+d^f(o, i) = o^f / i^f = (o^c - f^c) / (i^c - f^c) = (o^c/f^c - 1) / (i^c/f^c - 1)
+
+now we need o^c and i^c expressed in terms of f^c.
+we generalize to finding x^c/f^c where x can be any sun, any ring, or the carrier, and f can be any other sun or ring.
+If x is the carrier then trivially 0 = c^c = x^c = x^c/f^c.
+Else, let Px denote the measure of the planet gear in mesh with x, and Pf denote the analogue for f, then x^c/f^c = F/X×Pf/Px.
+Trivially Pf/Px drops when both x and f are in mesh with the same planet gear.
+(Note that because of normalization, Px = 1 - X or Px = 1 + X depending on the element type (sun or ring) of X. But this fact can't be used to simplify the formula, in fact it is easier to keep the concerns separate.)
+To get the sign of the ring gear speeds right, it might be best to just put a minus in front of the ring gears measure.
+
+Now, to calculate ratios of the output shaft and all free-wheeling gears (including, if applicable, the carrier shaft), we need to find a fine data structure to store all the measures and another structure to store the path of power (i/o/f).
+

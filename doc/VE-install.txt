@@ -1,0 +1,17 @@
+I am on Eclipse 3.5 Galileo (newest is 3.6 Helios).
+matching VE is 1.40 which in turn needs EMF Core 2.4
+
+EMF Core:  http://download.eclipse.org/modeling/emf/updates/releases/
+install EMF SDK 2.5.0
+
+tools.ve Update Site - http://download.eclipse.org/tools/ve/updates/1.4/
+
+df -h # before installing
+Dateisystem            Größe Benut  Verf Ben% Eingehängt auf
+/dev/sda7              17G   13G  3,5G  79% /
+/dev/sda5             9,2G  5,7G  3,1G  65% /home
+
+und danach:
+/dev/sda7              17G   13G  3,5G  79% /
+/dev/sda5             9,2G  5,7G  3,1G  66% /home
+

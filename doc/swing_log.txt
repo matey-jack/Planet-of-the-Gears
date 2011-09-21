@@ -1,0 +1,77 @@
+1. initialize JTable with my data
+result: everything editable
+2. make first col read-only and create auto-update for dependant values
+
+when the model fires an event, will JTable automatically listen to it and update the content? is this the way that the table is updated after a CellEditor has finished? (CellEditor calls Model.setCell, and Model fires event, and Table catches it?) 
+so all my model needs to do is use the set() for one cell to update some others and then fire the event for all cells in that column.
+--> works as planned
+
+Visual Editor doesn't work on the file any more because I edited it too much already. I wrap the table in a scroll_pane and then it also shows the headings. Now that things work, I could do it again with VE, but it doesn't seem worthwhile right now. 
+
+Now, how can we make the numbers all appear with a fixed number of digits?
+– JTable.setDefaultRenderer(Class<?> columnClass, TableCellRenderer renderer)
+
+Renderers are set per-ColumnClass. ColumnClasses are just the cell data-type for a column. they default to Object and are defined by overriding TableModel.getColumnClass().
+“In order to _set_ the data-type for a column, you have to override method TableModel.getColumnClass().”
+
+Tutorial says: “To choose the renderer that displays the cells in a column, a table first determines whether you specified a renderer for that particular column.” but it doesn't say how to specify a renderer for a particular column....
+
+  
+next step: when we have the second table, how do we do drag-drop of table cells to select input/output/ground? if cells can't be dragged, does the drop event at least tell us the cell?
+
+Here's another bad design in Swing (from JTable tutorial):
+the invariant (which they don't explicitly state) is:
+ cellSelectionEnabled = rowSelectionEnabled AND colSelectionEnabled
+so setting any of the latter to false or setting the former to true has the obvious effect on the other side of the equation which is described case-by-case in the tutorial. But nothing is set, aber setting cellSelEn from true to false! Which of the two others is changed? or both? stupid shit! cellSelEn should just be a read-only property that is changed via the others! 
+
+setDragEnabled(true) – first make sure, we are in single selection mode!
+then,  table's TransferHandler needs to be non-null
+
+read up on DropLocation
+TODO:
+– set Drop Mode to ON (drop onto existing locations)
+– StringSelection is the subclass of Transferable which the example uses...
+
+first, test DnD with a simple copy action, then see how implement the swap!
+copy:
+– start with a StringSelectiong
+– import with setValueAt(val, dl.row, dl.column)
+
+it compiles, but the DnD is not initiated. From looking at BasicDnD example, it turns out that the default TransferHandler of JTable supports export (only COPY), but not import (insertion). 
+check: does it depend on selection mode??
+we need SelectionMode: SingleSelection (what is selected)
+SelectionOptions: CellSelection (what is highlighted)
+
+since there are no colored cells yet, the output is invisible. 
+
+Swing DnD is made for exchanging data between applications as well as inside an application. it is not made for direct-manipulation tasks such as dropping grafical objects (for ex, adding a planet element to a gear scheme) or swapping cells in tables. 
+I can use it for my purposes and get the functional result with a less smooth user experience. For a better user experience, some customized methods have to be written using mouse events – a possibility that I reserve for further versions.
+
+For now, we can use the StringSelection Transferable as follows: encode a Magic String and the source row and column. Use this to give visual feedback via T'Handler.canImport(). Use it also for importData() to do the swap in a single routine.
+
+next steps:
+ – implement DnD for the paths, so that input and ground can be changed
+this would be Milestone 0.5
+
+ – add colors: extend DefaultTableCellRenderer in this way file:///home/robert/workspace/java_tutorial/tutorial/uiswing/components/table.html#renderer
+ just set background color and all shall be fine. yes!!!
+ 
+ – add/remove planet elements and paths
+ – table of speeds (sorted by output, showing i/o/g, gear steps)
+ – save and load
+ – grafical gear scheme display
+
+this would be Milestone 1!
+according to “release early”, M1 should go to SourceForge and be publicly announced!
+I can also put planned features and known bugs into SourceForge and see what feedback I get about those.
+
++++++++++++++++++++++
+"Add Transmission Path"
+"Add\nPlanet\nElement"
+"Remove" --> must be different label for each row/column, since it carries the state of what to remove! Can we do it without creating a new JLabel for every call? Yes! Store them in a nice separate list. ;)
+TableModel must provide extra rows/cols and return empty values. also recheck editable properties!
+
+Open questions:
+ - how to use min/max size of components to make it look nice
+ - how to change the mouse pointer (low priority)
+ 
